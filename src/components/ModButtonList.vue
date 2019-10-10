@@ -53,7 +53,6 @@ export default Vue.extend({
             },
             set( value: Mod[] ): void {
                 if (this.onUpdate){
-                    console.log( value );
                     this.onUpdate( value );
                 }
             }

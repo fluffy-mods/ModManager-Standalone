@@ -12,6 +12,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "electron:build": "vue-cli-service electron:build",
+    "electron:publish": "vue-cli-service electron:build --publish always",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
@@ -20,10 +21,14 @@
   "dependencies": {
     "@mdi/font": "^4.4.95",
     "@mdi/js": "^4.4.95",
+    "@types/winreg": "^1.2.30",
     "buefy": "^0.8.4",
     "bulma": "^0.7.5",
     "bulmaswatch": "^0.7.5",
+    "electron-log": "^3.0.8",
     "electron-store": "^5.0.0",
+    "electron-updater": "^4.1.2",
+    "ffi": "^2.3.0",
     "font-awesome": "^4.7.0",
     "moment": "^2.24.0",
     "mz": "^2.7.0",
@@ -32,6 +37,8 @@
     "vue-router": "^3.0.3",
     "vuedraggable": "^2.23.1",
     "vuex": "^3.1.1",
+    "windows-registry": "^0.1.5",
+    "winreg": "^1.2.4",
     "xml-flow": "^1.0.3",
     "xml2js": "^0.4.22"
   },

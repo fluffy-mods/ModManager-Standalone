@@ -1,15 +1,18 @@
 'use strict'
 
-import { 
-  app, 
-  protocol, 
-  BrowserWindow,
-  shell
-} from 'electron'
-import {
-  createProtocol,
-  installVueDevtools
-} from 'vue-cli-plugin-electron-builder/lib'
+import { app, protocol, BrowserWindow, ipcMain } from 'electron'
+import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
+import log from 'electron-log';
+import { autoUpdater } from 'electron-updater';
+
+log.transports.console.level = 'info';
+log.transports.file.level = 'info';
+log.transports.rendererConsole = null;
+log.transports.mainConsole = null;
+autoUpdater.logger = log;
+autoUpdater.autoDownload = false;
+autoUpdater.autoInstallOnAppQuit = false;
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 if (isDevelopment && !process.env.IS_TEST) {
@@ -91,11 +94,12 @@ app.on('ready', async () => {
     try {
       await installVueDevtools()
     } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString())
+      log.error('Vue Devtools failed to install:', e.toString())
     }
   }
 
   createWindow()
+  autoUpdater.checkForUpdates();
 })
 
 // Exit cleanly on request from parent process in development mode.
@@ -112,3 +116,38 @@ if (isDevelopment) {
     })
   }
 }
+
+
+// autoupdater
+autoUpdater.on('checking-for-update', () => {
+  log.info("updater", "checking for update");
+  win?.webContents.send('checking-for-update');
+})
+autoUpdater.on('update-available', (info) => {
+  log.info("updater", "update available", info );
+  win?.webContents.send('update-available', info );
+})
+ipcMain.on("download-update", (event) => {
+  log.info("download-update", event );
+  autoUpdater.downloadUpdate();
+})
+autoUpdater.on('update-not-available', (info) => {
+  log.info("updater", "no update available", info);
+  win?.webContents.send('update-not-available', info );
+})
+autoUpdater.on('error', (err) => {
+  log.error("updater", err);
+  win?.webContents.send('update-error', err );
+})
+autoUpdater.on('download-progress', (progress) => {
+  log.info("updater", "progress", progress);
+  win?.webContents.send('download-progress', progress );
+})
+autoUpdater.on('update-downloaded', (info) => {
+  log.info("updater", "update downloaded", info );
+  win?.webContents.send('update-downloaded', info );
+})
+ipcMain.on('install-update', (event, args) => {
+  log.info("updater", "install-update", {event, args});
+  autoUpdater.quitAndInstall();
+})

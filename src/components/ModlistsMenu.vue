@@ -57,9 +57,9 @@
                             <b-icon icon="chevron-down" size="is-small" />
                             <b-icon icon="file" size="is-small" />
                         </b-button>
-                        <b-dropwdown-item class="dropdown-label" custom>
+                        <div class="dropdown-label" custom>
                             Create modlist from saved game
-                        </b-dropwdown-item>
+                        </div>
                         <b-dropdown-item v-for="save in saves" :key="save.name" @click="createModlistFromSave(save)">
                             {{save.name}}
                         <span class="last-played">last played {{moment(save.time)}}</span>
@@ -78,6 +78,7 @@ import store from '@/store';
 import { mapState, mapGetters } from 'vuex';
 import { SnackbarProgrammatic as Snackbar } from 'buefy';
 import { Moment } from 'moment';
+import log from 'electron-log';
 
 export default Vue.extend({
     data(){
@@ -86,8 +87,8 @@ export default Vue.extend({
         }
     },
     computed: {
-        ... mapState( "preferences", ["configPath", "localPath", "steamPath"]),
-        ... mapGetters( "preferences", ["hasValidPaths"]),
+        ... mapState( "paths", ["configPath", "localPath", "steamPath"]),
+        ... mapGetters( "paths", ["hasValidPaths"]),
         ... mapState( "modlists", ["modlists"]),
         ... mapState( "saves", ["saves"]),
         active(): boolean { 
@@ -137,7 +138,7 @@ export default Vue.extend({
                         const index = await store.dispatch("modlists/createModlist", { name: value } );
                         await this.$router.push({name: "modlists", params: { list: index } });
                     } catch ( err ) {
-                        console.error( err );
+                        log.error( err );
                     }
                 } 
             })
@@ -149,7 +150,7 @@ export default Vue.extend({
                 await store.dispatch("modlists/updateModlist", { index, mods: modlist.mods });
                 await this.$router.push( { name: "modlists", params: {list:index} } );
             } catch (err) {
-                console.error( err );
+                log.error( err );
             }
         }
     }

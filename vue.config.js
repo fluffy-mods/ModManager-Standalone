@@ -6,12 +6,18 @@ module.exports = {
                 "appId": "org.fluffy.electron.mod-manager",
                 "productName": "RimWorld Mod Manager",
                 "win": {
-                    "target": ["nsis", "zip"]
+                    "target": ["nsis", "zip"],
+                    "publish": ["github"]
                 },
                 "nsis": {
                     "oneClick": true,
                     "allowToChangeInstallationDirectory": false
-                }
+                },
+                "publish": [{
+                    "provider": "github",
+                    "owner": "fluffy-mods",
+                    "repo": "ModManager-Standalone"
+                }]
             }
         }
     }

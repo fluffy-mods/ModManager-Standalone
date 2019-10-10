@@ -37,6 +37,7 @@ import store from '../store'
 import { mapState } from 'vuex';
 import { Mod, Modlist } from '@/io';
 import modButtonList from '../components/ModButtonList.vue';
+import log from 'electron-log';
 
 export default Vue.extend({
     name: "modlist",
@@ -70,7 +71,7 @@ export default Vue.extend({
                         await store.dispatch("modlists/deleteModlist", { index: this.index } );
                         await this.$router.push({name: "modlists", params: { list: '0' } });
                     } catch ( err ) {
-                        console.error( err );
+                        log.error( err );
                     }
                 } 
             })
@@ -85,7 +86,7 @@ export default Vue.extend({
                     try {
                         await store.dispatch("modlists/resetModlist", { index: this.index } );
                     } catch ( err ) {
-                        console.error( err );
+                        log.error( err );
                     }
                 } 
             })
@@ -103,7 +104,7 @@ export default Vue.extend({
                     try {
                         await store.dispatch("modlists/renameModlist", { index: this.index, name } );
                     } catch ( err ) {
-                        console.error( err );
+                        log.error( err );
                     }
                 } 
             })

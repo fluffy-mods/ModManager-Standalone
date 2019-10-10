@@ -1,14 +1,14 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import { mods, IModsState } from './mods';
-import { preferences, IPreferencesState } from './preferences';
+import { paths, IPathsState } from './paths';
 import { modlists, IModlistsState } from './modlists';
 import { saves, ISavesState } from './saves';
 
 Vue.use( Vuex );
 
 export interface IState {
-    preferences: IPreferencesState,
+    paths: IPathsState,
     mods: IModsState,
     modlists: IModlistsState,
     saves: ISavesState
@@ -16,7 +16,7 @@ export interface IState {
 
 export const store = new Vuex.Store({
     modules: {
-        preferences,
+        paths,
         mods,
         modlists,
         saves

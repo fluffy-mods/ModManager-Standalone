@@ -1,6 +1,9 @@
 <template>
     <div id="titlebar">
-        <span class="titlebar-title">RimWorld Mod Manager</span>
+        <span class="titlebar-title">
+            RimWorld Mod Manager
+        </span>
+        <updater class="titlebar-updater" />
         <b-field class="buttons">
             <div class="control">
                 <b-button type="is-dark" @click="minimize">
@@ -23,6 +26,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { remote } from 'electron';
+import updater from './Updater.vue';
 
 export default Vue.extend({
     name: "titlebar",
@@ -48,7 +52,12 @@ export default Vue.extend({
         close: function(){
             this.window.close()
         }
-
+    },
+    computed: {
+        version: () => ( 'v' + remote.app.getVersion() )
+    },
+    components: {
+        updater
     }
 })
 </script>
@@ -65,10 +74,18 @@ export default Vue.extend({
         align-items: center;
         
         .titlebar-title {
+            flex: 0 0 auto;
             padding-left: 1em;
         }
 
-        // padding: .75em;
+        .titlebar-updater {
+            flex: 1 1 auto;
+        }
+
+        .buttons {
+            flex: 0 0 auto;
+        }
+
         button, .button {
             -webkit-app-region: no-drag;
             width: 3em;

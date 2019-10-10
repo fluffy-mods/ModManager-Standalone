@@ -18,16 +18,16 @@
               <button class="button is-primary is-large" slot="trigger">
                 <b-icon icon="chevron-down" size="is-small" />
               </button>
-              <b-dropwdown-item class="dropdown-label" custom>
+              <div class="dropdown-label" custom>
                 Play with modlist
-              </b-dropwdown-item>
+              </div>
               <!-- Should not be doing filter logic here, but doing it in a computed property just ain't working -->
               <b-dropdown-item v-for="(modlist, index) in modlists.filter( l => !l.isModConfig )" :key="index" @click="startGameWith( modlist )">
                 {{modlist.name}}
               </b-dropdown-item>
-              <b-dropwdown-item class="dropdown-label" custom>
+              <div class="dropdown-label" custom>
                 Continue saved game
-              </b-dropwdown-item>
+              </div>
               <b-dropdown-item v-for="save in saves" :key="save.name" @click="loadGame(save)">
                 {{save.name}} 
                 <span class="last-played">last played {{moment(save.time)}}</span>
@@ -70,10 +70,11 @@ import { store, IState } from './store';
 import { mapState } from 'vuex';
 import { loadAll, Modlist, ISave, loadModlistFromSave } from './io';
 import moment, { Moment } from 'moment';
+import log from 'electron-log';
 
 export default Vue.extend({
   computed: {
-    ... mapState( "preferences", [ "rimworldPath" ] ),
+    ... mapState( "paths", [ "rimworldPath" ] ),
     ... mapState( "modlists", [ "modlists" ] ),
     ... mapState( "saves", ["saves"] ),
     showDropdown( this: any ): boolean {
@@ -88,7 +89,7 @@ export default Vue.extend({
     startGame( this: any ){
       // remote.app.quit();
       if(this.rimworldPath){ 
-        var child = spawn( store.state.preferences.rimworldPath, [], {
+        var child = spawn( store.state.paths.rimworldPath, [], {
           detached: true,
           stdio: [ 'ignore', 'ignore', 'ignore' ]
         }).unref();
@@ -132,14 +133,13 @@ export default Vue.extend({
         // });
         this.$buefy.snackbar.open("sorry, that doesn't work yet.")
       }     
-      console.log( {save,modlist} );
     }
   },
   components: { titlebar, modlists },
   created: async function() {
-    store.watch( ( state: IState, getters: any ) => state.preferences.configPath, () => loadAll() );
-    store.watch( ( state: IState, getters: any ) => state.preferences.steamPath, () => loadAll() );
-    store.watch( ( state: IState, getters: any ) => state.preferences.localPath, () => loadAll() );
+    store.watch( ( state: IState, getters: any ) => state.paths.configPath, () => loadAll() );
+    store.watch( ( state: IState, getters: any ) => state.paths.steamPath, () => loadAll() );
+    store.watch( ( state: IState, getters: any ) => state.paths.localPath, () => loadAll() );
     store.watch( ( state: IState, getters: any ) => state.mods, () => loadAll() );
     await loadAll();
   }
@@ -278,6 +278,10 @@ export default Vue.extend({
 
   .button.is-darker {
     background-color: darken( $dark, 3 );
+
+    &:hover, &:active, &:focus-within {
+      background-color: darken( $dark, 6 );
+    }
   }
 
   html, body {

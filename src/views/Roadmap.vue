@@ -19,16 +19,16 @@
             <li class="done">Launch game with mod list</li>
             <li>Launch game into save
                 <ul>
-                    <li>load and start </li>
-                    <li></li>
+                    <li class="done">load modlist from save</li>
+                    <li>companion mini-mod to allow quickstarting into arbitrary save</li>
                 </ul>
             </li>
             <li class="done">Load mod list from save (streaming xml, yay!)</li>
-            <li>Get RimWorld path from registry</li>
+            <li class="failed">Get RimWorld path from registry</li>
             <li class="done partial">Mod list searching/filtering</li>
             <li>write Readme</li>
-            <li>set up repository</li>
-            <li>Set up auto-update</li>
+            <li class="done">set up repository</li>
+            <li class="done">Set up auto-update</li>
         </ul>
         <hr>
         <h1 class="title">Full release</h1>
@@ -84,6 +84,13 @@ ul.checklist {
 
     li::before {
         content: "☐ "; 
+    }
+
+    li.failed {
+        &::before, &::after {
+            content: "😭";
+        }
+        color: rgba( 160, 40, 40, 1 );
     }
 
     li.done {

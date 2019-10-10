@@ -2,10 +2,11 @@ import fs from 'mz/fs'
 import path from 'path'
 import xml from 'xml2js'
 import store from '@/store';
+import log from 'electron-log';
 
 export async function loadMods(): Promise<Mod[]> {
-    const localMods = await loadModsFromDir( store.state.preferences.localPath, "local" );
-    const steamMods = await loadModsFromDir( store.state.preferences.steamPath, "steam" );
+    const localMods = await loadModsFromDir( store.state.paths.localPath, "local" );
+    const steamMods = await loadModsFromDir( store.state.paths.steamPath, "steam" );
     const mods = [
         ...localMods,
         ...steamMods
@@ -24,7 +25,7 @@ async function loadModsFromDir( dir: string, source: source ): Promise<Mod[]> {
         const mods = await Promise.all( modFolders.map( modFolder => Mod.fromPath( modFolder, dir, source ) ) ); 
         return (<any>mods).filter( Boolean );
     } catch( err ){
-        // console.error( {err} )
+        // log.error( {err} )
         return [];
     }
 }
@@ -114,11 +115,11 @@ export class Mod implements IMod {
                 await fs.stat( previewPath ); // errors if not available
                 mod.preview = previewPath; 
             } catch ( err ) {
-                console.log( `No preview for: ${mod.name || mod.identifier}`)
+                log.info( `No preview for: ${mod.name || mod.identifier}`)
             }
             return new Mod( mod );
         } catch ( err ) {
-            // console.error( err );
+            // log.error( err );
             return;
         }
     }

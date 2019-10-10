@@ -4,6 +4,7 @@ import xml from 'xml2js';
 import fs from 'mz/fs';
 import { Mod } from './mods';
 import { ISave } from '.';
+import log from 'electron-log';
 
 export async function loadModlists(): Promise<Modlist[]>{
     return <any>[
@@ -20,21 +21,21 @@ async function loadActiveModlist(): Promise<Modlist | undefined> {
         const mods = modIds.map( id => store.getters['mods/findOneById'](id) );
         return new Modlist( "Active", mods, true );
     } catch (err) {        
-        console.error( `Failed to load ModsConfig.xml: ${err}` );
+        log.error( `Failed to load ModsConfig.xml: ${err}` );
     }
 }
 
 function getModsConfigPath(): string {
-    return path.join(store.state.preferences.configPath, "Config/ModsConfig.xml" );
+    return path.join(store.state.paths.configPath, "Config/ModsConfig.xml" );
 }
 function getPath( fileName: string ): string {
-    return path.join(store.state.preferences.configPath, "ModLists", path.extname( fileName ) == ".xml" ? fileName : fileName + ".xml" );
+    return path.join(store.state.paths.configPath, "ModLists", path.extname( fileName ) == ".xml" ? fileName : fileName + ".xml" );
 }
 
 export async function writeModlist( modlist: Modlist, overwrite: boolean = true ){
     if (modlist.isModConfig ) return writeModsConfig( modlist );
 
-    const filePath = path.join( store.state.preferences.configPath,
+    const filePath = path.join( store.state.paths.configPath,
         "ModLists",
         modlist.name + ".xml" )
 
@@ -66,7 +67,7 @@ export async function deleteModlist( modlist: Modlist ){
 async function loadModManagerModlists(): Promise<Modlist[]> {
     const modlists: Modlist[] = [];
     try {
-        const modlistFiles = await fs.readdir( path.join( store.state.preferences.configPath, "ModLists" ) );
+        const modlistFiles = await fs.readdir( path.join( store.state.paths.configPath, "ModLists" ) );
         for ( const modlistFile of modlistFiles ){
             try {
                 const modlistString = await fs.readFile( getPath( modlistFile ), "utf8" );
@@ -85,11 +86,11 @@ async function loadModManagerModlists(): Promise<Modlist[]> {
                 }
                 modlists.push( new Modlist( name, mods ) );
             } catch ( err ){
-                console.error( `Failed to load ${modlistFile}: ${err}`);
+                log.error( `Failed to load ${modlistFile}: ${err}`);
             }
         }
     } catch (err){
-        console.error( `Failed to load modlists: ${err}` );
+        log.error( `Failed to load modlists: ${err}` );
     }
     return modlists;
 }

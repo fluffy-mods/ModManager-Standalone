@@ -47,12 +47,13 @@ import path from 'path';
 import fs from 'mz/fs';
 import {mapState, mapGetters} from 'vuex';
 import {store} from '../store/index';
+import log from 'electron-log';
 
 export default Vue.extend({
-    name: "preferences",
+    name: "paths",
     computed: {
-        ...mapState("preferences", ["rimworldPath", "localPath", "steamPath", "configPath"]),
-        ...mapGetters("preferences", ["configValid","localValid", "steamValid", "rimworldValid"])  
+        ...mapState("paths", ["rimworldPath", "localPath", "steamPath", "configPath"]),
+        ...mapGetters("paths", ["configValid","localValid", "steamValid", "rimworldValid"])  
     },
     methods: {
         setRimworldPath: async function(){
@@ -60,29 +61,29 @@ export default Vue.extend({
                  properties: ['openFile'],
                  filters: [{ name: "RimWorld executable", extensions: [ "exe", "app" ] }] });
             if( !chosenPath.canceled && chosenPath?.filePaths?.[0] ){
-                store.commit("preferences/setPath", { type: "rimworldPath", path: chosenPath.filePaths[0] });
+                store.commit("paths/setPath", { type: "rimworldPath", path: chosenPath.filePaths[0] });
 
                 const rimworldDir = path.dirname( chosenPath.filePaths[0] )
                 // try to set local mods path
                 const localPath = path.join( rimworldDir, "Mods" );
                 try {
                     const localStat = await fs.stat( localPath );
-                    if ( localStat.isDirectory() ){
-                        store.commit("preferences/setPath", { type: "localPath", path: localPath })
+                    if ( !store.state.paths.localPath && localStat.isDirectory() ){
+                        store.commit("paths/setPath", { type: "localPath", path: localPath })
                     }
                 } catch ( err ) {
-                    console.error( { err, localPath } );
+                    log.error( { err, localPath } );
                 }
 
                 // try to set steam mods path
                 const steamPath = path.join( rimworldDir, "../../workshop/content/294100" );
                 try {
                     const steamStat = await fs.stat( steamPath );
-                    if( steamStat.isDirectory() ){
-                        store.commit("preferences/setPath", { type: "steamPath", path: steamPath })
+                    if( !store.state.paths.steamPath && steamStat.isDirectory() ){
+                        store.commit("paths/setPath", { type: "steamPath", path: steamPath })
                     }
                 } catch ( err ) {
-                    console.error( {err, steamPath } );
+                    log.error( {err, steamPath } );
                 }
             }
         },
@@ -93,10 +94,10 @@ export default Vue.extend({
                 try {
                     const stat = await fs.stat( path );
                     if ( stat.isDirectory() ){
-                        store.commit("preferences/setPath", { type, path })
+                        store.commit("paths/setPath", { type, path })
                     }
                 } catch ( err ) {
-                    console.error( {err, path} );
+                    log.error( {err, path} );
                 }
             }
         }

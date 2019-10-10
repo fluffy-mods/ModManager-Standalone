@@ -4,6 +4,7 @@ import moment, { Moment } from 'moment';
 import store from '../store';
 import path from 'path';
 import { Modlist, Mod } from '.';
+import log from 'electron-log';
 
 const EXT = ".rws";
 
@@ -43,7 +44,7 @@ export async function loadModlistFromSave( save: ISave ): Promise<Modlist> {
         
         return new Modlist( save.name, mods, false );
     } catch ( err ) {
-        console.error( err );
+        log.error( err );
         throw err;
     }
 }
@@ -56,7 +57,7 @@ export interface ISave {
 
 export async function loadSaves(): Promise<ISave[]> {
     try {
-        const saveGamePath = path.join( store.state.preferences.configPath, "Saves" );
+        const saveGamePath = path.join( store.state.paths.configPath, "Saves" );
         const files = await fs.readdir( saveGamePath );
         const saves: ISave[] = [];
 
@@ -73,13 +74,13 @@ export async function loadSaves(): Promise<ISave[]> {
 
                 saves.push( save );
             } catch ( err ) {
-                console.error( err )
+                log.error( err )
             }
         }
 
         return saves;
     } catch ( err ) {
-        console.error( err );
+        log.error( err );
         return [];
     }
 
