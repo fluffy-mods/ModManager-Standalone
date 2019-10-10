@@ -6,6 +6,7 @@ module.exports = {
                 "appId": "org.fluffy.electron.mod-manager",
                 "productName": "RimWorld Mod Manager",
                 "win": {
+                    "icon": "./icon.png",
                     "target": ["nsis", "zip"],
                     "publish": ["github"]
                 },

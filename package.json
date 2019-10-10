@@ -6,7 +6,7 @@
     "email": "fluffy.l2032@gmail.com"
   },
   "repository": "github:fluffy-mods/ModManager-Standalone",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

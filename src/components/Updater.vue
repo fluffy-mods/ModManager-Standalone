@@ -12,12 +12,13 @@
         <template v-if="status === 'latest'">
             <b-icon icon="check" title="this is the latest version" type="is-success" size="is-small" />
         </template>
+        <!-- <b-progress id="update-progress" :value="progressPercent" type="is-info" show-value>{{progressLabel}}</b-progress> -->
         <template v-if="status === 'downloading'">
             <b-progress id="update-progress" :value="progressPercent" type="is-info" show-value>{{progressLabel}}</b-progress>
         </template>
         <template v-if="status === 'ready'">
             <b-button icon="arrow-up-bold" type="is-info" @click="installUpdate()" size="is-small">
-                install update
+                install update and reload
             </b-button>
         </template>
         <template v-if="status === 'installing'">
@@ -34,7 +35,7 @@
 
     #update-status {
         display: flex;
-        -webkit-app-region: no-drag;
+        align-items: center;
 
         .button {
             -webkit-app-region: no-drag;
@@ -47,16 +48,13 @@
 
         #update-progress {
             width: 100%;
+            max-width: 300px;
         }
         
-            progress, .progress {
-                height: .5em;
-                margin: .5em 0;
-                border-radius: 0;
-            }
-            p {
-                margin: .5em 0;
-            }
+        progress, .progress {
+            height: .75em;
+            border-radius: 0;
+        }
     }
 </style>
 
