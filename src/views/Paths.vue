@@ -59,7 +59,7 @@ export default Vue.extend({
         setRimworldPath: async function(){
             const chosenPath = await remote.dialog.showOpenDialog({
                  properties: ['openFile'],
-                 filters: [{ name: "RimWorld executable", extensions: [ "exe", "app" ] }] });
+                 filters: [{ name: "RimWorld executable", extensions: [ "exe", "" ] }] });
             if( !chosenPath.canceled && chosenPath?.filePaths?.[0] ){
                 store.commit("paths/setPath", { type: "rimworldPath", path: chosenPath.filePaths[0] });
 
