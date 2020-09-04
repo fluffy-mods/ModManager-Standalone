@@ -50,7 +50,7 @@
     "@vue/cli-service": "^3.11.0",
     "electron": "^6.0.0",
     "electron-context-menu": "^0.15.0",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.13.1",
     "sass-loader": "^7.1.0",
     "typescript": "^3.7.0-beta",
     "vue-cli-plugin-electron-builder": "^1.4.0",
