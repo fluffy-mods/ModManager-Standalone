@@ -48,7 +48,7 @@
     "@types/xml2js": "^0.4.5",
     "@vue/cli-plugin-typescript": "^3.11.0",
     "@vue/cli-service": "^3.11.0",
-    "electron": "^6.0.0",
+    "electron": "^9.4.0",
     "electron-context-menu": "^0.15.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
